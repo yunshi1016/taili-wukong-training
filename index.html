@@ -1,0 +1,1698 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>太力-钉钉悟空培训</title>
+  <style>
+    :root {
+      --paper: #f6f8fb;
+      --slide: #ffffff;
+      --ink: #111827;
+      --muted: #5d6676;
+      --subtle: #eef2f7;
+      --line: #d9e1ec;
+      --blue: #1677ff;
+      --blue-deep: #0755c9;
+      --blue-soft: #eaf3ff;
+      --shadow: 0 28px 80px rgba(15, 35, 75, 0.13);
+      --radius: 18px;
+      --small-radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        linear-gradient(90deg, rgba(17, 24, 39, 0.035) 1px, transparent 1px) 0 0 / 42px 42px,
+        linear-gradient(rgba(17, 24, 39, 0.03) 1px, transparent 1px) 0 0 / 42px 42px,
+        var(--paper);
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      min-height: 100dvh;
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+    }
+
+    .deck {
+      width: 100vw;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+    }
+
+    .slide {
+      display: none;
+      position: relative;
+      width: min(calc(100vw - 44px), calc((100dvh - 108px) * 16 / 9));
+      max-width: 1600px;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      border: 1px solid rgba(17, 24, 39, 0.08);
+      border-radius: var(--radius);
+      background: var(--slide);
+      box-shadow: var(--shadow);
+      padding: clamp(30px, 3.2vw, 54px);
+    }
+
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      animation: slide-in 180ms ease-out;
+    }
+
+    @keyframes slide-in {
+      from {
+        opacity: 0.35;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(135deg, rgba(22, 119, 255, 0.09), transparent 38%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.72), transparent 42%);
+      opacity: 0.9;
+    }
+
+    .slide > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .slide-header,
+    .slide-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-height: 34px;
+      flex: 0 0 auto;
+    }
+
+    .slide-header {
+      margin-bottom: clamp(14px, 1.6vw, 26px);
+    }
+
+    .slide-footer {
+      margin-top: auto;
+      padding-top: 18px;
+      color: #7b8494;
+      font-size: clamp(11px, 0.86vw, 13px);
+      border-top: 1px solid rgba(17, 24, 39, 0.08);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      color: #1c2638;
+      font-weight: 850;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      object-fit: contain;
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(22, 119, 255, 0.14);
+    }
+
+    .brand small {
+      display: block;
+      margin-top: 1px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 12px;
+      border: 1px solid rgba(22, 119, 255, 0.28);
+      border-radius: 999px;
+      color: var(--blue-deep);
+      background: rgba(234, 243, 255, 0.72);
+      font-size: clamp(12px, 0.9vw, 14px);
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .kicker {
+      margin: 0 0 12px;
+      color: var(--blue-deep);
+      font-size: clamp(13px, 1vw, 17px);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      max-width: 10.6em;
+      font-size: clamp(46px, 5.8vw, 92px);
+      line-height: 1.04;
+      letter-spacing: 0;
+      font-weight: 950;
+    }
+
+    h2 {
+      max-width: 14.5em;
+      font-size: clamp(32px, 3.6vw, 58px);
+      line-height: 1.08;
+      letter-spacing: 0;
+      font-weight: 930;
+    }
+
+    h3 {
+      font-size: clamp(19px, 1.7vw, 28px);
+      line-height: 1.22;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 38em;
+      color: #4a5567;
+      font-size: clamp(15px, 1.2vw, 20px);
+      line-height: 1.62;
+      font-weight: 650;
+    }
+
+    .body-text {
+      color: var(--muted);
+      font-size: clamp(13px, 0.95vw, 16px);
+      line-height: 1.58;
+      font-weight: 620;
+    }
+
+    .content {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      gap: clamp(18px, 2.3vw, 34px);
+      align-content: center;
+    }
+
+    .two-col {
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      align-items: center;
+    }
+
+    .two-col.reverse {
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    }
+
+    .cover-grid {
+      grid-template-columns: minmax(0, 0.98fr) minmax(0, 1.02fr);
+      align-items: center;
+    }
+
+    .cover-copy {
+      display: grid;
+      gap: 28px;
+      align-content: center;
+    }
+
+    .cover-title {
+      display: grid;
+      gap: 18px;
+    }
+
+    .cover-title strong {
+      color: var(--blue);
+    }
+
+    .cover-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .logo-pair {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 18px;
+      width: fit-content;
+      border: 1px solid rgba(22, 119, 255, 0.18);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 18px 48px rgba(22, 119, 255, 0.12);
+    }
+
+    .logo-pair img {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .logo-pair b {
+      display: block;
+      font-size: clamp(21px, 1.8vw, 29px);
+      font-weight: 930;
+      letter-spacing: 0;
+    }
+
+    .logo-pair span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 760;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      align-items: center;
+    }
+
+    .mascot-orbit {
+      position: absolute;
+      top: 2%;
+      right: 3%;
+      width: clamp(116px, 12vw, 178px);
+      height: clamp(116px, 12vw, 178px);
+      border-radius: 34px;
+      display: grid;
+      place-items: center;
+      background: #fff;
+      border: 1px solid rgba(17, 24, 39, 0.08);
+      box-shadow: 0 26px 70px rgba(22, 119, 255, 0.18);
+      transform: rotate(4deg);
+      z-index: 2;
+    }
+
+    .mascot-orbit img {
+      width: 74%;
+      height: 74%;
+      object-fit: contain;
+    }
+
+    .product-stack {
+      position: relative;
+      display: grid;
+      align-items: end;
+      min-height: 460px;
+    }
+
+    .product-shot {
+      border: 1px solid rgba(17, 24, 39, 0.09);
+      border-radius: 18px;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(25, 42, 70, 0.16);
+    }
+
+    .product-shot img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .product-shot.primary {
+      width: 88%;
+      aspect-ratio: 1.88 / 1;
+      justify-self: end;
+    }
+
+    .product-shot.secondary {
+      position: absolute;
+      left: 0;
+      bottom: 4%;
+      width: 46%;
+      aspect-ratio: 1.76 / 1;
+      border-radius: 14px;
+    }
+
+    .goal-grid {
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: center;
+    }
+
+    .numbered-list {
+      display: grid;
+      gap: 18px;
+      align-content: center;
+    }
+
+    .numbered-item {
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 14px 0;
+      border-top: 1px solid rgba(17, 24, 39, 0.1);
+    }
+
+    .numbered-item:first-child {
+      border-top: 0;
+    }
+
+    .num {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--blue);
+      color: white;
+      font-size: 18px;
+      font-weight: 900;
+      box-shadow: 0 14px 36px rgba(22, 119, 255, 0.24);
+    }
+
+    .note-panel {
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      padding: clamp(20px, 2.1vw, 34px);
+      border-radius: 18px;
+      border: 1px solid rgba(22, 119, 255, 0.16);
+      background:
+        linear-gradient(180deg, rgba(234, 243, 255, 0.88), rgba(255, 255, 255, 0.92));
+    }
+
+    .quote-line {
+      padding-left: 20px;
+      border-left: 7px solid var(--blue);
+      font-size: clamp(22px, 2vw, 34px);
+      line-height: 1.28;
+      font-weight: 920;
+      letter-spacing: 0;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .compare-card {
+      min-height: 240px;
+      padding: 26px;
+      border-radius: 18px;
+      border: 1px solid rgba(17, 24, 39, 0.11);
+      background: rgba(255, 255, 255, 0.86);
+      display: grid;
+      align-content: space-between;
+      gap: 18px;
+    }
+
+    .compare-card.emphasis {
+      border-color: rgba(22, 119, 255, 0.32);
+      background: linear-gradient(180deg, #ffffff, var(--blue-soft));
+    }
+
+    .compare-card .label {
+      color: var(--muted);
+      font-size: clamp(14px, 1vw, 17px);
+      font-weight: 800;
+    }
+
+    .compare-card .claim {
+      font-size: clamp(26px, 2.7vw, 42px);
+      line-height: 1.18;
+      font-weight: 930;
+      letter-spacing: 0;
+    }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      align-items: start;
+    }
+
+    .value-item {
+      min-height: 218px;
+      padding: 24px;
+      border-radius: 18px;
+      border: 1px solid rgba(17, 24, 39, 0.1);
+      background: rgba(255, 255, 255, 0.88);
+      display: grid;
+      align-content: start;
+      gap: 16px;
+    }
+
+    .value-item .eyebrow {
+      color: var(--blue-deep);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .shape-index {
+      width: 44px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--blue);
+    }
+
+    .device-layout {
+      grid-template-columns: 0.86fr 1.14fr;
+      align-items: center;
+    }
+
+    .channel-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .channel {
+      display: grid;
+      grid-template-columns: 116px 1fr;
+      gap: 18px;
+      align-items: start;
+      padding: 18px 0;
+      border-top: 1px solid rgba(17, 24, 39, 0.1);
+    }
+
+    .channel:first-child {
+      border-top: 0;
+    }
+
+    .channel b {
+      color: var(--blue-deep);
+      font-size: clamp(16px, 1.22vw, 20px);
+      font-weight: 900;
+    }
+
+    .image-frame {
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      border: 1px solid rgba(17, 24, 39, 0.1);
+      background: #fff;
+      box-shadow: 0 22px 60px rgba(25, 42, 70, 0.12);
+    }
+
+    .image-frame img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .image-frame.contain img {
+      object-fit: contain;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .finance-strip {
+      width: min(100%, 1180px);
+      aspect-ratio: 12.2 / 1;
+      align-self: center;
+      justify-self: center;
+    }
+
+    .finance-strip img {
+      padding: 14px;
+    }
+
+    .finance-practice-layout {
+      grid-template-columns: 1fr;
+      align-content: center;
+      gap: 22px;
+    }
+
+    .finance-practice-title {
+      justify-self: center;
+      width: min(100%, 1180px);
+    }
+
+    .finance-practice-title h2 {
+      max-width: 12em;
+    }
+
+    .finance-practice-layout .process-line {
+      width: min(100%, 1180px);
+      justify-self: center;
+    }
+
+    .workflow {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      align-items: start;
+      gap: 12px;
+    }
+
+    .step {
+      min-height: 208px;
+      border-radius: 16px;
+      border: 1px solid rgba(17, 24, 39, 0.1);
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px 18px;
+      display: grid;
+      align-content: start;
+      gap: 56px;
+    }
+
+    .step small {
+      color: var(--blue-deep);
+      font-weight: 900;
+      letter-spacing: 0.06em;
+    }
+
+    .step b {
+      display: block;
+      font-size: clamp(18px, 1.45vw, 24px);
+      line-height: 1.25;
+      font-weight: 920;
+    }
+
+    .scenario-head {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .scenario-points {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .point {
+      min-height: 112px;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(17, 24, 39, 0.1);
+      background: rgba(255, 255, 255, 0.88);
+      display: grid;
+      gap: 8px;
+      align-content: start;
+    }
+
+    .point b {
+      font-size: clamp(17px, 1.22vw, 21px);
+      line-height: 1.28;
+      font-weight: 900;
+    }
+
+    .point span {
+      color: var(--muted);
+      font-size: clamp(13px, 0.96vw, 16px);
+      line-height: 1.55;
+      font-weight: 620;
+    }
+
+    .process-line {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .process-node {
+      min-height: 184px;
+      padding: 20px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(17, 24, 39, 0.1);
+      display: grid;
+      align-content: start;
+      gap: 14px;
+    }
+
+    .process-node .bar {
+      width: 54px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--blue);
+    }
+
+    .wide-flow {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .mosaic {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 12px;
+      min-height: 430px;
+    }
+
+    .mosaic .image-frame:first-child {
+      grid-row: span 2;
+    }
+
+    .finance-mosaic {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      align-content: center;
+      align-items: center;
+      min-height: 0;
+    }
+
+    .finance-mosaic .image-frame:first-child {
+      grid-column: 1 / -1;
+      grid-row: auto;
+      aspect-ratio: 1.87 / 1;
+    }
+
+    .finance-mosaic .image-frame:nth-child(2) {
+      aspect-ratio: 16 / 9;
+    }
+
+    .finance-mosaic .image-frame:nth-child(3) {
+      aspect-ratio: 1.93 / 1;
+    }
+
+    .finance-mosaic .image-frame img {
+      object-fit: contain;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .pilot-grid {
+      display: grid;
+      grid-template-columns: 0.88fr 1.12fr;
+      gap: 34px;
+      align-items: center;
+    }
+
+    .phase-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .phase {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 18px;
+      padding: 20px;
+      border-radius: 18px;
+      border: 1px solid rgba(17, 24, 39, 0.1);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .phase code {
+      display: grid;
+      place-items: center;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid rgba(22, 119, 255, 0.32);
+      color: var(--blue-deep);
+      background: var(--blue-soft);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .closing {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 38px;
+      align-items: center;
+    }
+
+    .action-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .action {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(17, 24, 39, 0.1);
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    .action .check {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 950;
+    }
+
+    .source {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .progress {
+      position: fixed;
+      left: 22px;
+      right: 22px;
+      bottom: 3px;
+      height: 4px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(17, 24, 39, 0.12);
+      z-index: 10;
+    }
+
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--blue);
+      transition: width 160ms ease;
+    }
+
+    .controls {
+      position: fixed;
+      right: 22px;
+      bottom: 9px;
+      z-index: 11;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px;
+      border-radius: 999px;
+      border: 1px solid rgba(17, 24, 39, 0.1);
+      background: rgba(255, 255, 255, 0.86);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 14px 38px rgba(15, 35, 75, 0.13);
+    }
+
+    .controls button {
+      min-width: 74px;
+      height: 30px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .controls button.secondary {
+      color: #263246;
+      background: #edf2f7;
+    }
+
+    .controls button:active {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    .counter {
+      min-width: 54px;
+      text-align: center;
+      color: #344054;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .only-print {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .deck {
+        padding: 12px;
+      }
+
+      .slide {
+        width: calc(100vw - 24px);
+        padding: 24px;
+      }
+
+      .slide-header {
+        margin-bottom: 14px;
+      }
+
+      .tag {
+        display: none;
+      }
+
+      .value-grid,
+      .workflow,
+      .process-line {
+        gap: 8px;
+      }
+
+      .controls {
+        left: 16px;
+        right: 16px;
+        justify-content: center;
+      }
+    }
+
+    @media print {
+      html,
+      body {
+        height: auto;
+        overflow: visible;
+        background: #fff;
+      }
+
+      .deck {
+        display: block;
+        padding: 0;
+      }
+
+      .slide,
+      .slide.active {
+        display: flex;
+        width: 100vw;
+        max-width: none;
+        height: 56.25vw;
+        page-break-after: always;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .controls,
+      .progress {
+        display: none;
+      }
+
+      .only-print {
+        display: inline;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="太力-钉钉悟空培训演示稿">
+    <section class="slide active" data-title="封面">
+      <div class="content cover-grid">
+        <div class="cover-copy">
+          <div class="logo-pair" aria-label="钉钉悟空品牌">
+            <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空品牌图标" />
+            <div>
+              <b>钉钉悟空</b>
+              <span>Enterprise AI Platform</span>
+            </div>
+          </div>
+          <div class="cover-title">
+            <p class="kicker">Taili Training</p>
+            <h1>太力-<strong>钉钉悟空</strong>培训</h1>
+            <p class="lead">面向业务与职能团队的 60 分钟产品认知与场景演练。</p>
+          </div>
+          <div class="cover-meta">
+            <span class="tag">产品定位</span>
+            <span class="tag">行动式 AI</span>
+            <span class="tag">四类场景</span>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="mascot-orbit">
+            <img src="https://gw.alicdn.com/imgextra/i2/O1CN0119ZCOS25Pl9Co9sxe_!!6000000007519-2-tps-300-300.png" alt="" />
+          </div>
+          <div class="product-stack">
+            <figure class="product-shot primary">
+              <img src="https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/QvjnA3j3a6e6aOXo/img/6624b902-409e-449b-aaea-7c134984cbfc.png" alt="" />
+            </figure>
+            <figure class="product-shot secondary">
+              <img src="https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/QvjnA3j3a6e6aOXo/img/e15acffd-7c10-49b4-b54b-98ac8c0d0f9a.png" alt="" />
+            </figure>
+          </div>
+        </div>
+      </div>
+      <footer class="slide-footer">
+        <span>资料来源：钉钉悟空官网与《悟空简介》文档</span>
+        <span>01</span>
+      </footer>
+    </section>
+
+    <section class="slide" data-title="培训目标">
+      <header class="slide-header">
+        <div class="brand">
+          <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空" />
+          <span>太力-钉钉悟空培训<small>培训目标</small></span>
+        </div>
+        <span class="tag">目标：听懂、会拆、能试跑</span>
+      </header>
+      <div class="content goal-grid">
+        <div>
+          <p class="kicker">Learning Goals</p>
+          <h2>这次培训结束后，要能回答三件事</h2>
+          <p class="lead" style="margin-top: 22px;">不是泛泛讲 AI 概念，而是围绕“悟空能帮太力做什么”建立共同语言。</p>
+        </div>
+        <div class="numbered-list">
+          <div class="numbered-item">
+            <span class="num">1</span>
+            <div>
+              <h3>悟空是什么</h3>
+              <p class="body-text">理解它作为企业 AI 工作平台和 Agent 办公入口的定位。</p>
+            </div>
+          </div>
+          <div class="numbered-item">
+            <span class="num">2</span>
+            <div>
+              <h3>和普通 AI 有什么不同</h3>
+              <p class="body-text">从“生成回答”升级为“执行任务”，能调用工具并反馈进度。</p>
+            </div>
+          </div>
+          <div class="numbered-item">
+            <span class="num">3</span>
+            <div>
+              <h3>场景如何试起来</h3>
+              <p class="body-text">聚焦开发、法律、财务、制造四类任务，形成可验证的试点清单。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="slide-footer">
+        <span>建议节奏：产品认知 20 分钟，场景讲解 30 分钟，行动清单 10 分钟</span>
+        <span>02</span>
+      </footer>
+    </section>
+
+    <section class="slide" data-title="悟空定位">
+      <header class="slide-header">
+        <div class="brand">
+          <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空" />
+          <span>钉钉悟空<small>产品定位</small></span>
+        </div>
+        <span class="tag">Agent 办公统一入口</span>
+      </header>
+      <div class="content two-col">
+        <div>
+          <p class="kicker">Positioning</p>
+          <h2>从对话式 AI 到行动式 AI</h2>
+          <p class="lead" style="margin-top: 22px;">悟空不是只给建议的聊天窗口，而是能理解任务、调用工具、操作电脑并交付结果的工作平台。</p>
+        </div>
+        <div class="compare">
+          <div class="compare-card">
+            <div>
+              <p class="label">传统 AI 助手</p>
+              <p class="claim">回答问题，生成内容</p>
+            </div>
+            <p class="body-text">适合解释、总结、写作，但任务仍需要人工在多个系统里完成。</p>
+          </div>
+          <div class="compare-card emphasis">
+            <div>
+              <p class="label">钉钉悟空</p>
+              <p class="claim">理解目标，直接执行</p>
+            </div>
+            <p class="body-text">能像助手一样操作电脑，处理从简单到复杂的工作任务。</p>
+          </div>
+        </div>
+      </div>
+      <footer class="slide-footer">
+        <span>官网定义：面向企业的全新 AI 工作平台，定位为 Agent 办公统一入口</span>
+        <span>03</span>
+      </footer>
+    </section>
+
+    <section class="slide" data-title="核心价值">
+      <header class="slide-header">
+        <div class="brand">
+          <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空" />
+          <span>钉钉悟空<small>核心价值</small></span>
+        </div>
+        <span class="tag">执行、扩展、集成、记忆</span>
+      </header>
+      <div class="content">
+        <div>
+          <p class="kicker">Value</p>
+          <h2>悟空的价值，不止在“会说”</h2>
+        </div>
+        <div class="value-grid">
+          <article class="value-item">
+            <div class="shape-index"></div>
+            <div>
+              <p class="eyebrow">Task Execution</p>
+              <h3>任务执行</h3>
+            </div>
+            <p class="body-text">从“告诉你怎么做”变成“帮你把任务推进到结果”。</p>
+          </article>
+          <article class="value-item">
+            <div class="shape-index"></div>
+            <div>
+              <p class="eyebrow">Skill Market</p>
+              <h3>技能生态</h3>
+            </div>
+            <p class="body-text">覆盖内容、电商、数据、法务、财务等方向，并支持添加 Skill。</p>
+          </article>
+          <article class="value-item">
+            <div class="shape-index"></div>
+            <div>
+              <p class="eyebrow">DingTalk</p>
+              <h3>钉钉集成</h3>
+            </div>
+            <p class="body-text">可通过钉钉 IM 发起任务、接收进度通知、查看执行结果。</p>
+          </article>
+          <article class="value-item">
+            <div class="shape-index"></div>
+            <div>
+              <p class="eyebrow">Memory</p>
+              <h3>长期记忆</h3>
+            </div>
+            <p class="body-text">在持续沟通中记住上下文，让任务理解越来越贴近使用者。</p>
+          </article>
+        </div>
+      </div>
+      <footer class="slide-footer">
+        <span>讲解重点：价值来自执行链路，不只是模型能力本身</span>
+        <span>04</span>
+      </footer>
+    </section>
+
+    <section class="slide" data-title="产品形态">
+      <header class="slide-header">
+        <div class="brand">
+          <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空" />
+          <span>钉钉悟空<small>产品形态</small></span>
+        </div>
+        <span class="tag">桌面端 + 钉钉入口 + 移动端同步</span>
+      </header>
+      <div class="content device-layout">
+        <div>
+          <p class="kicker">Form Factor</p>
+          <h2>任务可以在多个入口发起和管理</h2>
+          <div class="channel-list" style="margin-top: 24px;">
+            <div class="channel">
+              <b>本地电脑</b>
+              <p class="body-text">安装悟空客户端后启用本地任务控制能力。</p>
+            </div>
+            <div class="channel">
+              <b>钉钉入口</b>
+              <p class="body-text">在钉钉 IM、聊天机器人和 H5 页面中发起任务。</p>
+            </div>
+            <div class="channel">
+              <b>移动同步</b>
+              <p class="body-text">接收进度通知，随时查看结果，不错过关键节点。</p>
+            </div>
+          </div>
+        </div>
+        <figure class="image-frame">
+          <img src="https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/QvjnA3j3a6e6aOXo/img/859afcab-943c-436f-ab19-ad2c748f38fc.png" alt="钉钉悟空手机与电脑联动界面" />
+        </figure>
+      </div>
+      <footer class="slide-footer">
+        <span>官网说明：安装客户端后，悟空会出现在钉钉 IM 聊天机器人与 H5 落地页中</span>
+        <span>05</span>
+      </footer>
+    </section>
+
+    <section class="slide" data-title="使用方式总览">
+      <header class="slide-header">
+        <div class="brand">
+          <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空" />
+          <span>钉钉悟空<small>使用方式</small></span>
+        </div>
+        <span class="tag">从发起任务到沉淀技能</span>
+      </header>
+      <div class="content">
+        <div>
+          <p class="kicker">Workflow</p>
+          <h2>把“口头需求”变成可追踪任务</h2>
+        </div>
+        <div class="workflow">
+          <article class="step">
+            <small>STEP 01</small>
+            <div>
+              <b>发起任务</b>
+              <p class="body-text">用自然语言描述目标和交付物。</p>
+            </div>
+          </article>
+          <article class="step">
+            <small>STEP 02</small>
+            <div>
+              <b>补充资料</b>
+              <p class="body-text">上传文档、表格、会议材料或参考截图。</p>
+            </div>
+          </article>
+          <article class="step">
+            <small>STEP 03</small>
+            <div>
+              <b>执行处理</b>
+              <p class="body-text">悟空规划步骤，并调用工具推进任务。</p>
+            </div>
+          </article>
+          <article class="step">
+            <small>STEP 04</small>
+            <div>
+              <b>查看结果</b>
+              <p class="body-text">在钉钉中接收进度通知和输出文件。</p>
+            </div>
+          </article>
+          <article class="step">
+            <small>STEP 05</small>
+            <div>
+              <b>沉淀技能</b>
+              <p class="body-text">把稳定流程封装为可复用的 Skill。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+      <footer class="slide-footer">
+        <span>训练口径：先跑真实任务，再判断是否值得做成标准技能</span>
+        <span>06</span>
+      </footer>
+    </section>
+
+    <section class="slide" data-title="开发交付">
+      <header class="slide-header">
+        <div class="brand">
+          <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空" />
+          <span>场景一<small>开发交付</small></span>
+        </div>
+        <span class="tag">需求整理、PRD、原型、交付辅助</span>
+      </header>
+      <div class="content scenario-head">
+        <div>
+          <p class="kicker">Scenario 01</p>
+          <h2>开发交付场景：把散乱需求变成可确认范围</h2>
+          <p class="lead" style="margin-top: 22px;">适合需求材料多、沟通反复、交付边界不清的应用开发任务。</p>
+        </div>
+        <div class="scenario-points">
+          <div class="point">
+            <b>资料归集</b>
+            <span>整理聊天记录、会议纪要、截图、表格和历史文档。</span>
+          </div>
+          <div class="point">
+            <b>需求分析</b>
+            <span>提炼业务目标、功能清单、角色权限和数据结构。</span>
+          </div>
+          <div class="point">
+            <b>PRD 输出</b>
+            <span>形成可发给业务确认的需求文档，锁定范围。</span>
+          </div>
+          <div class="point">
+            <b>原型辅助</b>
+            <span>基于确认后的需求，生成可点击、可讨论的应用原型。</span>
+          </div>
+        </div>
+      </div>
+      <footer class="slide-footer">
+        <span>讲解边界：开发结果仍需工程复核、测试和安全评审</span>
+        <span>07</span>
+      </footer>
+    </section>
+
+    <section class="slide" data-title="开发场景演练">
+      <header class="slide-header">
+        <div class="brand">
+          <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空" />
+          <span>场景演练<small>开发交付</small></span>
+        </div>
+        <span class="tag">散乱资料到可确认原型</span>
+      </header>
+      <div class="content wide-flow">
+        <div>
+          <p class="kicker">Practice</p>
+          <h2>需求资料一次导入，先让悟空整理范围</h2>
+          <div class="process-line" style="margin-top: 28px;">
+            <article class="process-node">
+              <span class="bar"></span>
+              <h3>输入</h3>
+              <p class="body-text">会议纪要、表格、参考截图、业务口述。</p>
+            </article>
+            <article class="process-node">
+              <span class="bar"></span>
+              <h3>处理</h3>
+              <p class="body-text">功能清单、流程、角色、数据字段、待确认问题。</p>
+            </article>
+            <article class="process-node">
+              <span class="bar"></span>
+              <h3>输出</h3>
+              <p class="body-text">PRD 初稿、原型思路、验收清单。</p>
+            </article>
+          </div>
+        </div>
+        <figure class="image-frame">
+          <img src="https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/QvjnA3j3a6e6aOXo/img/24d06158-6b80-4636-a7d7-15d57dad0d17.png" alt="钉钉悟空任务界面示例" />
+        </figure>
+      </div>
+      <footer class="slide-footer">
+        <span>现场提示：让业务先确认“这是我理解的需求”，再继续推进开发</span>
+        <span>08</span>
+      </footer>
+    </section>
+
+    <section class="slide" data-title="法律服务">
+      <header class="slide-header">
+        <div class="brand">
+          <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空" />
+          <span>场景二<small>法律服务</small></span>
+        </div>
+        <span class="tag">检索、分析、起草、复核</span>
+      </header>
+      <div class="content scenario-head">
+        <div>
+          <p class="kicker">Scenario 02</p>
+          <h2>法律服务场景：让资料处理和文书准备更高效</h2>
+          <p class="lead" style="margin-top: 22px;">悟空适合处理标准化资料整理、检索和初稿准备，专业判断必须保留人工复核。</p>
+        </div>
+        <div class="scenario-points">
+          <div class="point">
+            <b>谈案笔录</b>
+            <span>声文同步、要点提取、待补充材料整理。</span>
+          </div>
+          <div class="point">
+            <b>类案检索</b>
+            <span>围绕事实、争议焦点和裁判结果做参考检索。</span>
+          </div>
+          <div class="point">
+            <b>企业查询</b>
+            <span>股权、关联关系、经营风险等信息归纳。</span>
+          </div>
+          <div class="point">
+            <b>文书起草</b>
+            <span>生成初稿、修改建议和材料清单。</span>
+          </div>
+        </div>
+      </div>
+      <footer class="slide-footer">
+        <span>关键提醒：法律结论、风险评级和对外文件必须由专业人员确认</span>
+        <span>09</span>
+      </footer>
+    </section>
+
+    <section class="slide" data-title="法律场景演练">
+      <header class="slide-header">
+        <div class="brand">
+          <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空" />
+          <span>场景演练<small>法律服务</small></span>
+        </div>
+        <span class="tag">复核机制优先</span>
+      </header>
+      <div class="content two-col reverse">
+        <figure class="image-frame">
+          <img src="https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/QvjnA3j3a6e6aOXo/img/e15acffd-7c10-49b4-b54b-98ac8c0d0f9a.png" alt="钉钉悟空技能中心示例" />
+        </figure>
+        <div>
+          <p class="kicker">Practice</p>
+          <h2>让悟空做初筛，不让 AI 替代签字判断</h2>
+          <div class="numbered-list" style="margin-top: 24px;">
+            <div class="numbered-item">
+              <span class="num">1</span>
+              <div>
+                <h3>输入资料</h3>
+                <p class="body-text">案情记录、合同文本、企业信息、历史沟通材料。</p>
+              </div>
+            </div>
+            <div class="numbered-item">
+              <span class="num">2</span>
+              <div>
+                <h3>输出初稿</h3>
+                <p class="body-text">事实摘要、争议点、检索方向、文书框架。</p>
+              </div>
+            </div>
+            <div class="numbered-item">
+              <span class="num">3</span>
+              <div>
+                <h3>人工确认</h3>
+                <p class="body-text">对结论、引用、风险等级和对外措辞做专业复核。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="slide-footer">
+        <span>安全边界：涉密资料先确认权限、脱敏和留痕要求</span>
+        <span>10</span>
+      </footer>
+    </section>
+
+    <section class="slide" data-title="财务自动化">
+      <header class="slide-header">
+        <div class="brand">
+          <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空" />
+          <span>场景三<small>财务自动化</small></span>
+        </div>
+        <span class="tag">开票、日报、查验、凭证</span>
+      </header>
+      <div class="content two-col">
+        <div>
+          <p class="kicker">Scenario 03</p>
+          <h2>财务自动化场景：把重复核对和生成工作交给任务流</h2>
+          <p class="lead" style="margin-top: 22px;">官网场景覆盖一句话开票、现金日报推送、发票识别查验和智能生成凭证。</p>
+          <div class="channel-list" style="margin-top: 24px;">
+            <div class="channel">
+              <b>开票</b>
+              <p class="body-text">识别开票意图与关键信息，对接开票流程。</p>
+            </div>
+            <div class="channel">
+              <b>日报</b>
+              <p class="body-text">跨行流水拉取后形成现金日报。</p>
+            </div>
+            <div class="channel">
+              <b>凭证</b>
+              <p class="body-text">识别发票、查验信息，并辅助生成凭证。</p>
+            </div>
+          </div>
+        </div>
+        <div class="mosaic finance-mosaic">
+          <figure class="image-frame">
+            <img src="https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/4jKqm0bw44AyZnw1/img/cf158a0c-3031-4737-8d9c-e06c52a69611.png" alt="财务开票场景截图" />
+          </figure>
+          <figure class="image-frame">
+            <img src="https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/4jKqm0bw44AyZnw1/img/d69cd83e-fd36-481d-9133-51efa0e60fda.png" alt="现金日报场景截图" />
+          </figure>
+          <figure class="image-frame">
+            <img src="https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/4jKqm0bw44AyZnw1/img/6044e1e4-a13d-4a60-ba8b-6b01142869a2.png" alt="凭证生成场景截图" />
+          </figure>
+        </div>
+      </div>
+      <footer class="slide-footer">
+        <span>讲解重点：财务场景适合从高频、规则清晰、可复核的任务开始</span>
+        <span>11</span>
+      </footer>
+    </section>
+
+    <section class="slide" data-title="财务场景演练">
+      <header class="slide-header">
+        <div class="brand">
+          <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空" />
+          <span>场景演练<small>财务自动化</small></span>
+        </div>
+        <span class="tag">从票据和流水到可复核结果</span>
+      </header>
+      <div class="content finance-practice-layout">
+        <div class="finance-practice-title">
+          <p class="kicker">Practice</p>
+          <h2>先做辅助生成，再接入正式系统</h2>
+        </div>
+        <figure class="image-frame contain finance-strip">
+          <img src="https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/res/4jKqm0bw44AyZnw1/img/a77dd1d1-4c6d-4d03-8aeb-fee9e5e82964.png" alt="财务任务串联流程截图" />
+        </figure>
+        <div class="process-line">
+          <article class="process-node">
+            <span class="bar"></span>
+            <h3>采集</h3>
+            <p class="body-text">发票、流水、对账资料、报销说明。</p>
+          </article>
+          <article class="process-node">
+            <span class="bar"></span>
+            <h3>校验</h3>
+            <p class="body-text">识别字段、查验异常、标出缺失信息。</p>
+          </article>
+          <article class="process-node">
+            <span class="bar"></span>
+            <h3>输出</h3>
+            <p class="body-text">日报、凭证建议、待人工复核项。</p>
+          </article>
+        </div>
+      </div>
+      <footer class="slide-footer">
+        <span>上线边界：金额、税务口径和系统入账动作需要保留审批与复核</span>
+        <span>12</span>
+      </footer>
+    </section>
+
+    <section class="slide" data-title="制造协同">
+      <header class="slide-header">
+        <div class="brand">
+          <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空" />
+          <span>场景四<small>制造协同</small></span>
+        </div>
+        <span class="tag">工艺、BOM、进度、风险</span>
+      </header>
+      <div class="content scenario-head">
+        <div>
+          <p class="kicker">Scenario 04</p>
+          <h2>制造协同场景：让创意、工艺和生产过程连接起来</h2>
+          <p class="lead" style="margin-top: 22px;">官网场景强调工艺结构分析、BOM 拆解、项目进度管理、风险预警和经验沉淀。</p>
+        </div>
+        <div class="scenario-points">
+          <div class="point">
+            <b>工艺分析</b>
+            <span>围绕设计意图、结构和可制造性做初步分析。</span>
+          </div>
+          <div class="point">
+            <b>BOM 拆解</b>
+            <span>把物料、工序和依赖关系拆成可跟踪清单。</span>
+          </div>
+          <div class="point">
+            <b>进度管理</b>
+            <span>汇总项目节点、责任人、交付物和阻塞项。</span>
+          </div>
+          <div class="point">
+            <b>经验沉淀</b>
+            <span>归档项目文档和沟通记录，减少重复问题。</span>
+          </div>
+        </div>
+      </div>
+      <footer class="slide-footer">
+        <span>讲解重点：制造场景更适合先做协同辅助，再逐步连接生产系统</span>
+        <span>13</span>
+      </footer>
+    </section>
+
+    <section class="slide" data-title="制造场景演练">
+      <header class="slide-header">
+        <div class="brand">
+          <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空" />
+          <span>场景演练<small>制造协同</small></span>
+        </div>
+        <span class="tag">从创意需求到复盘沉淀</span>
+      </header>
+      <div class="content wide-flow">
+        <div>
+          <p class="kicker">Practice</p>
+          <h2>用一条生产协同链路讲清悟空角色</h2>
+          <div class="workflow" style="grid-template-columns: repeat(4, minmax(0, 1fr)); margin-top: 28px;">
+            <article class="step">
+              <small>01</small>
+              <div>
+                <b>创意与需求</b>
+                <p class="body-text">输入图纸、描述、客户要求。</p>
+              </div>
+            </article>
+            <article class="step">
+              <small>02</small>
+              <div>
+                <b>工艺与 BOM</b>
+                <p class="body-text">拆解结构、物料和工序。</p>
+              </div>
+            </article>
+            <article class="step">
+              <small>03</small>
+              <div>
+                <b>进度与风险</b>
+                <p class="body-text">跟踪节点，提示阻塞项。</p>
+              </div>
+            </article>
+            <article class="step">
+              <small>04</small>
+              <div>
+                <b>复盘沉淀</b>
+                <p class="body-text">归档文档，沉淀问题库。</p>
+              </div>
+            </article>
+          </div>
+        </div>
+        <figure class="image-frame contain">
+          <img src="https://alidocs.oss-cn-zhangjiakou.aliyuncs.com/a/RwYGzy0mgFkQbMj3/5732cf53659b4bdfa28e2dbef40402210794.png" alt="制造协同技能概览图" />
+        </figure>
+      </div>
+      <footer class="slide-footer">
+        <span>落地建议：先让悟空汇总项目资料和风险，再评估与 MES、ERP 的连接深度</span>
+        <span>14</span>
+      </footer>
+    </section>
+
+    <section class="slide" data-title="太力落地建议">
+      <header class="slide-header">
+        <div class="brand">
+          <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空" />
+          <span>太力落地建议<small>试点路径</small></span>
+        </div>
+        <span class="tag">先低风险试跑，再标准化沉淀</span>
+      </header>
+      <div class="content pilot-grid">
+        <div>
+          <p class="kicker">Pilot Path</p>
+          <h2>不要一上来追求全自动，先把可控任务跑通</h2>
+          <p class="lead" style="margin-top: 22px;">选择资料清晰、规则明确、结果可复核的任务，能最快验证价值。</p>
+        </div>
+        <div class="phase-list">
+          <article class="phase">
+            <code>第 1 周</code>
+            <div>
+              <h3>选任务</h3>
+              <p class="body-text">从四类场景中选 2-3 个低风险、高频、资料完整的真实任务。</p>
+            </div>
+          </article>
+          <article class="phase">
+            <code>第 2 周</code>
+            <div>
+              <h3>跑闭环</h3>
+              <p class="body-text">记录输入、执行过程、输出质量、人工修订点和节省时间。</p>
+            </div>
+          </article>
+          <article class="phase">
+            <code>第 3 周</code>
+            <div>
+              <h3>沉淀模板</h3>
+              <p class="body-text">把稳定任务整理成提示词、资料清单、复核清单或 Skill。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+      <footer class="slide-footer">
+        <span>评价标准：结果质量、节省时间、权限可控、业务愿意复用</span>
+        <span>15</span>
+      </footer>
+    </section>
+
+    <section class="slide" data-title="行动清单">
+      <header class="slide-header">
+        <div class="brand">
+          <img src="https://g.alicdn.com/dingding/wukong-home/0.1.0/assets/icons/brand-logo.png" alt="钉钉悟空" />
+          <span>收尾<small>行动清单</small></span>
+        </div>
+        <span class="tag">下一步从真实任务开始</span>
+      </header>
+      <div class="content closing">
+        <div>
+          <p class="kicker">Next Action</p>
+          <h2>每个部门准备一个真实任务，现场跑一次完整流程</h2>
+          <p class="lead" style="margin-top: 22px;">让太力团队用真实资料、真实流程和真实复核标准判断悟空的价值。</p>
+          <div class="action-list" style="margin-top: 28px;">
+            <div class="action">
+              <span class="check">1</span>
+              <p class="body-text">准备一份真实任务资料：文档、表格、截图、会议纪要均可。</p>
+            </div>
+            <div class="action">
+              <span class="check">2</span>
+              <p class="body-text">明确想要悟空输出什么：摘要、清单、报告、草稿或风险点。</p>
+            </div>
+            <div class="action">
+              <span class="check">3</span>
+              <p class="body-text">记录哪些步骤可以复用，哪些环节必须人工确认。</p>
+            </div>
+          </div>
+        </div>
+        <div class="note-panel">
+          <div class="logo-pair">
+            <img src="https://gw.alicdn.com/imgextra/i2/O1CN0119ZCOS25Pl9Co9sxe_!!6000000007519-2-tps-300-300.png" alt="悟空形象" />
+            <div>
+              <b>钉钉悟空</b>
+              <span>行动式 AI 工作平台</span>
+            </div>
+          </div>
+          <p class="quote-line">从一个真实任务开始，把可复用经验沉淀成团队能力。</p>
+        </div>
+      </div>
+      <footer class="slide-footer">
+        <span>结束页：太力-钉钉悟空培训</span>
+        <span>16</span>
+      </footer>
+    </section>
+  </main>
+
+  <div class="controls" aria-label="幻灯片控制">
+    <button class="secondary" type="button" id="prevBtn">上一页</button>
+    <span class="counter" id="counter">1 / 16</span>
+    <button type="button" id="nextBtn">下一页</button>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const counter = document.getElementById("counter");
+    const progressBar = document.getElementById("progressBar");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    let current = 0;
+
+    function clampIndex(index) {
+      return Math.max(0, Math.min(slides.length - 1, index));
+    }
+
+    function showSlide(index, updateHash = true) {
+      current = clampIndex(index);
+      slides.forEach((slide, slideIndex) => {
+        slide.classList.toggle("active", slideIndex === current);
+      });
+      counter.textContent = `${current + 1} / ${slides.length}`;
+      progressBar.style.width = `${((current + 1) / slides.length) * 100}%`;
+      document.title = `${slides[current].dataset.title} - 太力-钉钉悟空培训`;
+      if (updateHash) {
+        history.replaceState(null, "", `#${current + 1}`);
+      }
+    }
+
+    function move(delta) {
+      showSlide(current + delta);
+    }
+
+    prevBtn.addEventListener("click", () => move(-1));
+    nextBtn.addEventListener("click", () => move(1));
+
+    document.addEventListener("keydown", (event) => {
+      const forwardKeys = ["ArrowRight", "PageDown", " "];
+      const backKeys = ["ArrowLeft", "PageUp", "Backspace"];
+      if (forwardKeys.includes(event.key)) {
+        event.preventDefault();
+        move(1);
+      }
+      if (backKeys.includes(event.key)) {
+        event.preventDefault();
+        move(-1);
+      }
+      if (event.key === "Home") {
+        event.preventDefault();
+        showSlide(0);
+      }
+      if (event.key === "End") {
+        event.preventDefault();
+        showSlide(slides.length - 1);
+      }
+    });
+
+    const hashIndex = Number.parseInt(location.hash.replace("#", ""), 10);
+    if (Number.isFinite(hashIndex) && hashIndex > 0) {
+      showSlide(hashIndex - 1, false);
+    } else {
+      showSlide(0, false);
+    }
+  </script>
+</body>
+</html>
